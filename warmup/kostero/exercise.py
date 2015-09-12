@@ -1,33 +1,46 @@
 class Card:
+
     def __init__(self, color, shape, fill, number):
         self.color = color
         self.shape = shape
         self.fill = fill
         self.number = number
         self.nr = color*27 + shape*9 + fill*3 + number
+
     def __eq__(self, other):
         return self.nr == other.nr
+
     def __lt__(self, other):
         return self.nr < other.nr
+
     def __hash__(self):
         return hash(self.nr)
+
     def __repr__(self):
         return str(self.nr)
+
     def from_list(card_as_list):
-        return Card(card_as_list[0], card_as_list[1], card_as_list[2], card_as_list[3])
+        return Card(card_as_list[0], card_as_list[1], card_as_list[2],
+                    card_as_list[3])
+
     def to_list(self):
         return [self.color, self.shape, self.fill, self.number]
+
     def from_str(card_as_string):
         temp_list = card_as_string.split(" ")
-        colors = {"red" : 0, "green" : 1, "purple" : 2}
-        shapes = {"wiggle" : 0, "oval" : 1, "rectangle" : 2}
-        fills = {"empty" : 0, "shaded" : 1, "filled" : 2}
-        return Card(colors[temp_list[0]],shapes[temp_list[1]],fills[temp_list[2]],int(temp_list[3])-1)
+        colors = {"red": 0, "green": 1, "purple": 2}
+        shapes = {"wiggle": 0, "oval": 1, "rectangle": 2}
+        fills = {"empty": 0, "shaded": 1, "filled": 2}
+        return Card(colors[temp_list[0]], shapes[temp_list[1]],
+                    fills[temp_list[2]], int(temp_list[3])-1)
+
     def to_str(self):
         colors = {0: "red", 1: "green", 2: "purple"}
-        shapes = {0: "wiggle", 1: "oval", 2 : "rectangle"}
+        shapes = {0: "wiggle", 1: "oval", 2: "rectangle"}
         fills = {0: "empty", 1: "shaded", 2: "filled"}
-        return " ".join([colors[self.color],shapes[self.shape],fills[self.fill],str(self.number + 1)])
+        return " ".join([colors[self.color], shapes[self.shape],
+                        fills[self.fill], str(self.number + 1)])
+
 
 def correct_set(card1, card2, card3):
     list1 = card1.to_list()
@@ -39,22 +52,28 @@ def correct_set(card1, card2, card3):
             return False
     return True
 
+
 class Board:
+
     def __init__(self):
         self.cards = set()
         self.sets = set()
+
     def __repr__(self):
-        return "<< " + " ".join(list(map(str,list(self.cards)))) + " >>"
+        return "<< " + " ".join(list(map(str, list(self.cards)))) + " >>"
+
     def number_of_cards(self):
         return len(self.cards)
+
     def add_card(self, card):
         for i in self.cards:
             for j in self.cards:
                 if i < j:
-                    if(correct_set(i,j,card)):
-                        self.sets.add((i,j,card))
+                    if(correct_set(i, j, card)):
+                        self.sets.add((i, j, card))
         self.cards.add(card)
-    def remove_card(self,card):
+
+    def remove_card(self, card):
         if(card in self.cards):
             toremove = []
             for myset in self.sets:
@@ -64,12 +83,14 @@ class Board:
                 self.sets.remove(myset)
             self.cards.remove(card)
         else:
-            raise Exception("you tried to delete card that doesn't exist in board")
+            raise Exception("this card doesn't exist in board")
+
     def collect_set(self, card1, card2, card3):
-        if(correct_set(card1,card2,card3)):
+        if(correct_set(card1, card2, card3)):
             for card in [card1, card2, card3]:
                 self.remove_card(card)
         else:
             raise Exception("incorrect set")
+
     def find_sets(self):
         return self.sets
