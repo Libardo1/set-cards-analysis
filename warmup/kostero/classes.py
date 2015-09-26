@@ -94,3 +94,26 @@ class Board:
 
     def find_sets(self):
         return self.sets
+
+    
+def type_of_the_set(card1, card2, card3):
+    if not correct_set(card1, card2, card3):
+        raise Exception("this set is bad")
+    typ = []
+    if card1.color == card2.color and card1.color == card3.color:
+        typ.append("same color")
+    else:
+        typ.append("diff color")
+    if card1.shape == card2.shape and card1.shape == card3.shape:
+        typ.append("same shape")
+    else:
+        typ.append("diff shape")
+    if card1.fill == card2.fill and card1.fill == card3.fill:
+        typ.append("same fill")
+    else:
+        typ.append("diff fill")    
+    if card1.number == card2.number and card1.number == card3.number:
+        typ.append("same number")
+    else:
+        typ.append("diff number")   
+    return ", ".join(typ)
